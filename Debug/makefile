@@ -30,21 +30,23 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: OpenV2G.exe
+prog=open_v2g
+all: $(prog)
 
 # Tool invocations
-OpenV2G.exe: $(OBJS) $(USER_OBJS)
+$(prog): $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MinGW C Linker'
-	gcc  -o "OpenV2G.exe" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "$(prog)" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) OpenV2G.exe
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) $(prog)
 	-@echo ' '
 
+.DEFAULT_GOAL := all
 .PHONY: all clean dependents
 .SECONDARY:
 

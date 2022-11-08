@@ -136,6 +136,7 @@ static int appHandshakeHandler(bitstream_t* iStream, bitstream_t* oStream) {
 	uint32_t payloadLengthDec;
 
 
+	CH_DEBUG("appHandshakeHandler start\n");
 	if ( (errn = read_v2gtpHeader(iStream->data, &payloadLengthDec)) == 0) {
 		*iStream->pos = V2GTP_HEADER_LENGTH;
 		if( (errn = decode_appHandExiDocument(iStream, &exiDoc)) ) {
@@ -173,7 +174,7 @@ static int appHandshakeHandler(bitstream_t* iStream, bitstream_t* oStream) {
 		errn = write_v2gtpHeader(oStream->data, (*oStream->pos)-V2GTP_HEADER_LENGTH, V2GTP_EXI_TYPE);
 	}
 
-
+	CH_DEBUG("appHandshakeHandler end\n");
 	return errn;
 }
 
@@ -195,6 +196,10 @@ static int appHandshake()
 	char* ns0 = "urn:iso:15118:2:2010:MsgDef";
 	char* ns1 = "urn:din:70121:2012:MsgDef";
 
+	/**
+	 * stream1 is request
+	 * stream2 is response
+	 */
 	stream1.size = BUFFER_SIZE;
 	stream1.data = buffer1;
 	stream1.pos = &pos1;
@@ -206,6 +211,10 @@ static int appHandshake()
 	init_appHandEXIDocument(&handshake);
 
 	printf("EV side: setup data for the supported application handshake request message\n");
+
+	/**
+	 * 设定协议数组，并且初始化名称、版本号等信息。
+	 */
 
 	/* set up ISO/IEC 15118 Version 1.0 information */
 	handshake.supportedAppProtocolReq_isUsed = 1u;

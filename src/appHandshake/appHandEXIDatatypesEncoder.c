@@ -49,7 +49,8 @@ static int encode_appHandAnonType_supportedAppProtocolReq(bitstream_t* stream, s
 static int encode_appHandAnonType_supportedAppProtocolRes(bitstream_t* stream, struct appHandAnonType_supportedAppProtocolRes* appHandAnonType_supportedAppProtocolRes);
 
 
-/* Complex type name='urn:iso:15118:2:2010:AppProtocol,AppProtocolType',  base type name='anyType',  content type='ELEMENT',  isAbstract='false',  hasTypeId='false',  final='0',  block='0',  particle='(ProtocolNamespace,VersionNumberMajor,VersionNumberMinor,SchemaID,Priority)',  derivedBy='RESTRICTION'.  */
+
+/* Complex type name='urn:iso:15118:2:2010:AppProtocol,AppProtocolType',  base type name='anyType',  content type='ELEMENT',  isAbstract='false',  hasTypeId='false',  final='0',  block='0',  particle='(ProtocolNamespace,VersionNumberMajor,VersionNumberMinor,SchemaID,Priority)',  derivedBy='RESTRICTION'.  */
 static int encode_appHandAppProtocolType(bitstream_t* stream, struct appHandAppProtocolType* appHandAppProtocolType) {
 	int grammarID = 0;
 	int done = 0;
@@ -637,31 +638,50 @@ static int encode_appHandAnonType_supportedAppProtocolRes(bitstream_t* stream, s
 
 int encode_appHandExiDocument(bitstream_t* stream, struct appHandEXIDocument* exiDoc) {
 	errn = writeEXIHeader(stream);
+	CH_DEBUG("======before call ====\n");
+	CH_DEBUG("pos:%lu\n", *stream->pos);
+	CH_DEBUG("size:%lu\n", stream->size);
 
 	if(errn == 0) {
 		/* DocContent[START_ELEMENT({urn:iso:15118:2:2010:AppProtocol}supportedAppProtocolReq), START_ELEMENT({urn:iso:15118:2:2010:AppProtocol}supportedAppProtocolRes), START_ELEMENT_GENERIC] */
 		if ( exiDoc->supportedAppProtocolReq_isUsed == 1u ) { 
 			/* START_ELEMENT({urn:iso:15118:2:2010:AppProtocol}supportedAppProtocolReq) */
 			errn = encodeNBitUnsignedInteger(stream, 2, 0);
+			CH_DEBUG("======after encodeNBitUnsignedInteger ====\n");
+			CH_DEBUG("pos:%lu\n", *stream->pos);
+			CH_DEBUG("size:%lu\n", stream->size);
 			if(errn == 0) {
 				errn = encode_appHandAnonType_supportedAppProtocolReq(stream, &exiDoc->supportedAppProtocolReq );
 			}
+			CH_DEBUG("======after supportedAppProtocolReq_isUsed ====\n");
+			CH_DEBUG("pos:%lu\n", *stream->pos);
+			CH_DEBUG("size:%lu\n", stream->size);
 		} else if ( exiDoc->supportedAppProtocolRes_isUsed == 1u ) { 
 			/* START_ELEMENT({urn:iso:15118:2:2010:AppProtocol}supportedAppProtocolRes) */
 			errn = encodeNBitUnsignedInteger(stream, 2, 1);
 			if(errn == 0) {
 				errn = encode_appHandAnonType_supportedAppProtocolRes(stream, &exiDoc->supportedAppProtocolRes );
 			}
+			CH_DEBUG("======after supportedAppProtocolRes_isUsed ====\n");
+			CH_DEBUG("pos:%lu\n", *stream->pos);
+			CH_DEBUG("size:%lu\n", stream->size);
 		} else {
 			errn = EXI_ERROR_UNKOWN_EVENT;
 		}
 
 	}
-
+	CH_DEBUG("======before flush ====\n");
+	CH_DEBUG("pos:%lu\n", *stream->pos);
+	CH_DEBUG("size:%lu\n", stream->size);
+	CH_DEBUG("capacity:%lu\n", stream->capacity);
 	if(errn == 0) {
 		/* flush any pending bits */
 		errn = encodeFinish(stream);
 	}
+	CH_DEBUG("======after call ====\n");
+	CH_DEBUG("pos:%lu\n", *stream->pos);
+	CH_DEBUG("size:%lu\n", stream->size);
+	CH_DEBUG("capacity:%lu\n", stream->capacity);
 
 	return errn;
 }
