@@ -45,6 +45,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdio.h>
 #include "EXIConfig.h"
+#include "../debug/debug.h"
 #if EXI_STREAM == FILE_STREAM
 #include <stdio.h>
 #endif
